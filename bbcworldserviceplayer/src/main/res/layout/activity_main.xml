@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:background="#C02519">
+
+    <ImageView
+        android:id="@+id/bbcImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="0dp"
+        android:src="@drawable/logo"
+        android:background="#C02519"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="10dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="@string/init"
+        android:id="@+id/textViewInfo"
+        android:background="#C02519"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:autoText="false"
+        android:paddingBottom="10dp"
+        android:textColor="@android:color/white"
+        android:gravity="start"
+        android:width="110dp" />
+</RelativeLayout>
