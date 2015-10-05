@@ -2,6 +2,7 @@
 
 Android app  (Android 4.0.3+) for streaming the BBC World Service radio program. <br /><br />
 
+![alt tag](https://github.com/lukamicoder/bbc-world-service-player/blob/master/screenshot.jpg)
 
 <sub>Licensed under the Apache 2.0 license.</sub>
 
