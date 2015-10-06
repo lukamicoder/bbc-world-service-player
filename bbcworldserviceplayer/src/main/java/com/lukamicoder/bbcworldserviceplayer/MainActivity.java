@@ -27,17 +27,15 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private TextView textViewInfo;
-    private double timeElapsed = 0;
     private Handler durationHandler = new Handler();
     private Handler progressHandler = new Handler();
-    private Boolean isEnabled = false;
-    private Boolean isRunning = false;
+    private Menu menu;
     private NotificationManager nmanager;
     private NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+    private Integer dotCount = 0;
+    private Boolean isEnabled = false;
     private final String ExitIntentString = "ExitIntent";
     private final static String PlayControlIntentString = "PlayControlIntent";
-    private Menu menu;
-    private Integer dotCount = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -159,6 +157,7 @@ public class MainActivity extends AppCompatActivity {
     private void controlPlay() {
         MenuItem menuItemPlayControl = menu.findItem(R.id.menuItemPlayControl);
 
+        Boolean isRunning;
         if (menuItemPlayControl.getTitle() == getString(R.string.pause)) {
             mediaPlayer.pause();
             isRunning = false;
@@ -179,7 +178,7 @@ public class MainActivity extends AppCompatActivity {
 
     private Runnable updateDuration = new Runnable() {
         public void run() {
-            timeElapsed = mediaPlayer.getCurrentPosition();
+            double timeElapsed = mediaPlayer.getCurrentPosition();
             String duration = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) timeElapsed),
                     TimeUnit.MILLISECONDS.toSeconds((long) timeElapsed) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeElapsed)));
             textViewInfo.setText(duration);
