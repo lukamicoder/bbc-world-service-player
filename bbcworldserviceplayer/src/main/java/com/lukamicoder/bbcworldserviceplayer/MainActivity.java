@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 MenuInflater inflater = getMenuInflater();
                 inflater.inflate(R.menu.main_menu, menu);
                 textViewInfo.setGravity(Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL);
-                textViewInfo.setText("00:00");
+                textViewInfo.setText(getString(R.string.start_pos));
                 progressHandler.removeCallbacks(updateProgress);
             }
         });
@@ -121,13 +121,13 @@ public class MainActivity extends AppCompatActivity {
         boolean isLollipop = (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP);
 
         Notification notification = mBuilder
-                .setContentTitle("BBC World Service")
-                .setContentText("00:00")
+                .setContentTitle(getString(R.string.app_short_name))
+                .setContentText(getString(R.string.start_pos))
                 .setOngoing(true)
                 .setSmallIcon(isLollipop ? R.mipmap.ic_launcher_white : R.mipmap.ic_launcher)
                 .setContentIntent(mainPendingIntent)
-                .addAction(android.R.drawable.ic_media_play, "Play", actionPendingIntent)
-                .addAction(android.R.drawable.ic_menu_close_clear_cancel, "Exit", exitPendingIntent).build();
+                .addAction(android.R.drawable.ic_media_play, getString(R.string.play), actionPendingIntent)
+                .addAction(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.exit), exitPendingIntent).build();
 
         nmanager.notify(1, notification);
     }
@@ -173,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         mBuilder.mActions.get(0).icon = isRunning ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play;
-        mBuilder.mActions.get(0).title = isRunning ? "Pause" : "Play";
+        mBuilder.mActions.get(0).title = isRunning ? getString(R.string.pause) : getString(R.string.play);
         nmanager.notify(1, mBuilder.build());
     }
 
