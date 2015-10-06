@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/BBCWorldServicePlayer.iml" filepath="$PROJECT_DIR$/BBCWorldServicePlayer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/bbc-world-service-player.iml" filepath="$PROJECT_DIR$/bbc-world-service-player.iml" />
       <module fileurl="file://$PROJECT_DIR$/bbcworldserviceplayer/bbcworldserviceplayer.iml" filepath="$PROJECT_DIR$/bbcworldserviceplayer/bbcworldserviceplayer.iml" />
     </modules>
   </component>
