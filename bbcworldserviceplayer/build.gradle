@@ -6,7 +6,7 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
     defaultConfig {
-        applicationId "com.lukamicoder.bbcworldserviceplayer"
+        applicationId "com.lukamicoder.bbcworldnewsplayer"
         minSdkVersion 15
         targetSdkVersion 23
         versionCode 3
