@@ -26,18 +26,17 @@ import java.util.concurrent.TimeUnit;
 public class MainActivity extends AppCompatActivity {
     private MediaPlayer mediaPlayer;
     private TextView textViewInfo;
-    private Handler durationHandler = new Handler();
-    private Handler initHandler = new Handler();
-    private Handler noInternetHandler = new Handler();
     private Menu menu;
     private NotificationManager nmanager;
-    private NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+    private final NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
+    private final Handler durationHandler = new Handler();
+    private final Handler initHandler = new Handler();
+    private final Handler noInternetHandler = new Handler();
     private Integer dotCount = -4;
-    private Integer noInternetInterval = 5000;
-    private Integer initProgressInterval = 500;
+    private final Integer noInternetInterval = 5000;
+    private final Integer initProgressInterval = 500;
     private Integer initProgressCount = 0;
-    private Integer maxInitProgressCount = 60; //30 sec
-    private Integer updateDurationInterval = 500;
+    private final Integer updateDurationInterval = 500;
     private static final Integer NID = 1;
     private static final String EXIT_INTENT = "ExitIntent";
     private static final String PLAYCONTROL_INTENT = "PlayControlIntent";
@@ -193,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         nmanager.notify(NID, mBuilder.build());
     }
 
-    private Runnable updateDuration = new Runnable() {
+    private final Runnable updateDuration = new Runnable() {
         public void run() {
             double timeElapsed = mediaPlayer.getCurrentPosition();
             String duration = String.format("%02d:%02d", TimeUnit.MILLISECONDS.toMinutes((long) timeElapsed),
@@ -206,9 +205,10 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Runnable updateInitProgress = new Runnable() {
+    private final Runnable updateInitProgress = new Runnable() {
         public void run() {
-            if (initProgressCount++ >= maxInitProgressCount) {
+            //30 sec
+            if (initProgressCount++ >= 60) {
                 textViewInfo.setText(R.string.unable_to_connect);
                 return;
             }
@@ -228,7 +228,7 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private Runnable checkInternet = new Runnable() {
+    private final Runnable checkInternet = new Runnable() {
         public void run() {
             if (isInternetAvailable()) {
                 preparePlayer();
