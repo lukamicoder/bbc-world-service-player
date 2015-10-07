@@ -35,10 +35,12 @@ public class MainActivity extends AppCompatActivity {
     private Integer dotCount = -4;
     private Integer noInternetInterval = 5000;
     private Integer initProgressInterval = 500;
+    private Integer initProgressCount = 0;
+    private Integer maxInitProgressCount = 60; //30 sec
     private Integer updateDurationInterval = 500;
-    private final Integer notificationID = 1;
-    private final String ExitIntentString = "ExitIntent";
-    private final static String PlayControlIntentString = "PlayControlIntent";
+    private static final Integer NID = 1;
+    private static final String EXIT_INTENT = "ExitIntent";
+    private static final String PLAYCONTROL_INTENT = "PlayControlIntent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,18 +86,19 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.main_menu, menu);
         textViewInfo.setText(getString(R.string.start_pos));
 
-        Intent playControlIntent = new Intent(PlayControlIntentString);
+        Intent playControlIntent = new Intent(PLAYCONTROL_INTENT);
         PendingIntent actionPendingIntent = PendingIntent.getBroadcast(this, 0, playControlIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent exitIntent = new Intent(ExitIntentString);
+        Intent exitIntent = new Intent(EXIT_INTENT);
         PendingIntent exitPendingIntent = PendingIntent.getBroadcast(this, 0, exitIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         mBuilder.addAction(android.R.drawable.ic_media_play, getString(R.string.play), actionPendingIntent);
         mBuilder.addAction(android.R.drawable.ic_menu_close_clear_cancel, getString(R.string.exit), exitPendingIntent);
-        nmanager.notify(notificationID, mBuilder.build());
+        nmanager.notify(NID, mBuilder.build());
 
-        registerReceiver(exitIntentReceiver, new IntentFilter(ExitIntentString));
-        registerReceiver(playControlIntentReceiver, new IntentFilter(PlayControlIntentString));
+        IntentFilter filter = new IntentFilter(EXIT_INTENT);
+        filter.addAction(PLAYCONTROL_INTENT);
+        registerReceiver(broadcastReceiver, filter);
 
         initHandler.removeCallbacks(updateInitProgress);
     }
@@ -137,20 +140,20 @@ public class MainActivity extends AppCompatActivity {
                 .setSmallIcon(isLollipop ? R.mipmap.ic_launcher_white : R.mipmap.ic_launcher)
                 .setContentIntent(mainPendingIntent).build();
 
-        nmanager.notify(notificationID, notification);
+        nmanager.notify(NID, notification);
     }
 
-    private final BroadcastReceiver exitIntentReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            unload();
-        }
-    };
-
-    private final BroadcastReceiver playControlIntentReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            controlPlay();
+            switch (intent.getAction()) {
+                case PLAYCONTROL_INTENT:
+                    controlPlay();
+                    break;
+                case EXIT_INTENT:
+                    unload();
+                    break;
+            }
         }
     };
 
@@ -160,8 +163,7 @@ public class MainActivity extends AppCompatActivity {
         initHandler.removeCallbacks(updateInitProgress);
         noInternetHandler.removeCallbacks(checkInternet);
         try {
-            unregisterReceiver(exitIntentReceiver);
-            unregisterReceiver(playControlIntentReceiver);
+            unregisterReceiver(broadcastReceiver);
         } catch (IllegalArgumentException ignored) {
         }
 
@@ -188,7 +190,7 @@ public class MainActivity extends AppCompatActivity {
 
         mBuilder.mActions.get(0).icon = isRunning ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play;
         mBuilder.mActions.get(0).title = isRunning ? getString(R.string.pause) : getString(R.string.play);
-        nmanager.notify(notificationID, mBuilder.build());
+        nmanager.notify(NID, mBuilder.build());
     }
 
     private Runnable updateDuration = new Runnable() {
@@ -198,7 +200,7 @@ public class MainActivity extends AppCompatActivity {
                     TimeUnit.MILLISECONDS.toSeconds((long) timeElapsed) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes((long) timeElapsed)));
             textViewInfo.setText(duration);
 
-            nmanager.notify(notificationID, mBuilder.setContentText(duration).build());
+            nmanager.notify(NID, mBuilder.setContentText(duration).build());
 
             durationHandler.postDelayed(this, updateDurationInterval);
         }
@@ -206,13 +208,18 @@ public class MainActivity extends AppCompatActivity {
 
     private Runnable updateInitProgress = new Runnable() {
         public void run() {
+            if (initProgressCount++ >= maxInitProgressCount) {
+                textViewInfo.setText(R.string.unable_to_connect);
+                return;
+            }
+
             String text = getText(R.string.init).toString();
 
             if (dotCount++ == 0) {
                 dotCount = -3;
             }
 
-            String padding = String.format("%" + (Math.abs(dotCount) + 1) + "s", " ");
+            String padding = String.format("%" + (Math.abs(dotCount) + 2) + "s", " ");
             text = text.substring(0, text.length() + dotCount) + padding;
 
             textViewInfo.setText(text);
