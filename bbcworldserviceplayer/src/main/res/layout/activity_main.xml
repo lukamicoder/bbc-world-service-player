@@ -29,6 +29,6 @@
         android:autoText="false"
         android:paddingBottom="10dp"
         android:textColor="@android:color/white"
-        android:gravity="start"
-        android:width="110dp" />
+        android:gravity="center"
+        android:width="220dp" />
 </RelativeLayout>
