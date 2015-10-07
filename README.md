@@ -1,6 +1,8 @@
 # bbc-world-service-player
 
-Android app  (Android 4.0.3+) for streaming the BBC World Service radio program. <br /><br />
+Android app  (Android 4.0.3+) for streaming the BBC World Service radio program.
+
+Also available at [Google Play](https://play.google.com/store/apps/details?id=com.lukamicoder.bbcworldnewsplayer).<br /><br />
 
 ![alt tag](https://github.com/lukamicoder/bbc-world-service-player/blob/master/screenshot.jpg)
 
