@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private final Handler durationHandler = new Handler();
     private final Handler initHandler = new Handler();
     private final Handler noInternetHandler = new Handler();
-    private Integer dotCount = -4;
+    private Integer dotCount = 0;
     private final Integer noInternetInterval = 5000;
     private final Integer initProgressInterval = 500;
     private Integer initProgressCount = 0;
@@ -173,22 +173,25 @@ public class MainActivity extends AppCompatActivity {
     private void controlPlay() {
         MenuItem menuItemPlayControl = menu.findItem(R.id.menuItemPlayControl);
 
-        Boolean isRunning;
         if (menuItemPlayControl.getTitle() == getString(R.string.pause)) {
             mediaPlayer.pause();
-            isRunning = false;
+
+            mBuilder.mActions.get(0).icon = android.R.drawable.ic_media_play;
+            mBuilder.mActions.get(0).title = getString(R.string.play);
+
             menuItemPlayControl.setIcon(android.R.drawable.ic_media_play);
             menuItemPlayControl.setTitle(getString(R.string.play));
         } else {
             menuItemPlayControl.setIcon(android.R.drawable.ic_media_pause);
             menuItemPlayControl.setTitle(getString(R.string.pause));
+
+            mBuilder.mActions.get(0).icon = android.R.drawable.ic_media_pause;
+            mBuilder.mActions.get(0).title = getString(R.string.pause);
+
             durationHandler.postDelayed(updateDuration, updateDurationInterval);
             mediaPlayer.start();
-            isRunning = true;
         }
 
-        mBuilder.mActions.get(0).icon = isRunning ? android.R.drawable.ic_media_pause : android.R.drawable.ic_media_play;
-        mBuilder.mActions.get(0).title = isRunning ? getString(R.string.pause) : getString(R.string.play);
         nmanager.notify(NID, mBuilder.build());
     }
 
@@ -219,8 +222,11 @@ public class MainActivity extends AppCompatActivity {
                 dotCount = -3;
             }
 
-            String padding = String.format("%" + (Math.abs(dotCount) + 2) + "s", " ");
-            text = text.substring(0, text.length() + dotCount) + padding;
+            text = text.substring(0, text.length() + dotCount);
+
+            for (int x = 0; x < Math.abs(dotCount); x++) {
+                text += ' ';
+            }
 
             textViewInfo.setText(text);
 
